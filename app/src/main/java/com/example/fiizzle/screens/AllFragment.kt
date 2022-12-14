@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -29,6 +30,8 @@ class AllFragment : Fragment() {
 //            AddStudyDialog(requireContext()).show()
 //        }
 
+        initSpinner()
+
         return binding.root
     }
 
@@ -37,14 +40,20 @@ class AllFragment : Fragment() {
         setAdapter()
     }
 
+    private fun initSpinner() {  // 스피너 초기화
+        val subject = resources.getStringArray(R.array.spinner)
+
+        val subjectAdapter = ArrayAdapter(requireContext(), R.layout.item_spinner, subject)
+        binding.allSpinner.adapter = subjectAdapter
+        binding.allSpinner.setSelection(0)
+    }
+
     private fun setAdapter() {
         binding.allStudyListRv.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         binding.allStudyListRv.adapter = studyListRVAdapter
 
         getTestList()
         studyListRVAdapter.addList(studyList)
-
-
     }
 
     private fun getTestList() {
