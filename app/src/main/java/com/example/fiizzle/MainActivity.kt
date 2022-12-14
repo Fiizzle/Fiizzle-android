@@ -8,8 +8,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        supportFragmentManager.beginTransaction().replace(R.id.main_layout, BookFragment())
-            .commitAllowingStateLoss()
+//        supportFragmentManager.beginTransaction().replace(R.id.main_layout, BookFragment())
+//            .commitAllowingStateLoss()
 
         setContentView(R.layout.activity_main)
     }

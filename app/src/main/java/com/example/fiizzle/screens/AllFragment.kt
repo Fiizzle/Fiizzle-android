@@ -48,6 +48,7 @@ class AllFragment : Fragment() {
     }
 
     private fun getTestList() {
+        studyList.clear()
         studyList.add(
             StudyList(
                 "list01",
