@@ -25,8 +25,8 @@ import com.skydoves.balloon.overlay.BalloonOverlayCircle
 class BookFragment: Fragment() {
     private lateinit var binding : FragmentBookBinding
 
-    var icons = ArrayList<ImageView>()
-    var colorIcon = ArrayList<Int>()
+    private var icons = ArrayList<ImageView>()
+    private var colorIcon = ArrayList<Int>()
 
     private val arg : BookFragmentArgs by navArgs()
 
@@ -87,8 +87,6 @@ class BookFragment: Fragment() {
         return binding.root
     }
 
-
-
     private fun clickHandler() {
         binding.allBottomMypage.setOnClickListener{
             findNavController().navigate(R.id.action_bookFragment_to_mypageFragment)
@@ -106,8 +104,8 @@ class BookFragment: Fragment() {
             }
         }
     }
-
-    fun appendBookIcon(){
+    
+    private fun appendBookIcon(){
         icons.add(binding.bookIcon1)
         icons.add(binding.bookIcon2)
         icons.add(binding.bookIcon3)
@@ -132,7 +130,7 @@ class BookFragment: Fragment() {
     }
 
 
-    fun appendColorIcon(){
+    private fun appendColorIcon(){
         colorIcon.add(R.drawable.ic_book_white1)
         colorIcon.add(R.drawable.ic_book_white2)
         colorIcon.add(R.drawable.ic_book_white3)
