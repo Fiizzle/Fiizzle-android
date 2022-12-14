@@ -5,8 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -34,7 +32,7 @@ class AllFragment : Fragment() {
 
         return binding.root
 
-//        initSpinner()
+        initSpinner()
     }
 
     override fun onResume() {
@@ -57,8 +55,6 @@ class AllFragment : Fragment() {
 
         getTestList()
         studyListRVAdapter.addList(studyList)
-
-
     }
 
     private fun getTestList() {
