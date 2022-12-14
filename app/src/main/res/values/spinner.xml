@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="spinner">
+        <item>전체</item>
+        <item>국어</item>
+        <item>영어</item>
+        <item>수학</item>
+    </string-array>
+</resources>

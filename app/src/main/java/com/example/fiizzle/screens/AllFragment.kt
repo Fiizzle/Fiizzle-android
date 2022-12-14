@@ -4,6 +4,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -30,11 +33,22 @@ class AllFragment : Fragment() {
 //        }
 
         return binding.root
+
+//        initSpinner()
     }
 
     override fun onResume() {
         super.onResume()
         setAdapter()
+    }
+
+    private fun initSpinner() {  // 스피너 초기화
+        // 도시 스피너 어뎁터 연결
+        val subject = resources.getStringArray(R.array.spinner)  // 도시 목록
+
+        val subjectAdapter = ArrayAdapter(requireContext(), R.layout.item_spinner, subject)
+        binding.allSpinner.adapter = subjectAdapter
+        binding.allSpinner.setSelection(0)
     }
 
     private fun setAdapter() {
