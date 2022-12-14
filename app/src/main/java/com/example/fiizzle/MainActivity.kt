@@ -4,8 +4,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.example.fiizzle.screens.AllFragment
 import com.example.fiizzle.screens.BookFragment
-import com.example.fiizzle.screens.LoginFragment
-import com.example.fiizzle.screens.SignInFragment
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
