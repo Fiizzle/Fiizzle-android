@@ -21,8 +21,8 @@ import com.skydoves.balloon.overlay.BalloonOverlayCircle
 class BookFragment: Fragment() {
     private lateinit var binding : FragmentBookBinding
 
-    var icons = ArrayList<ImageView>()
-    var colorIcon = ArrayList<Int>()
+    private var icons = ArrayList<ImageView>()
+    private var colorIcon = ArrayList<Int>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -75,7 +75,7 @@ class BookFragment: Fragment() {
         return binding.root
     }
 
-    fun appendBookIcon(){
+    private fun appendBookIcon(){
         icons.add(binding.bookIcon1)
         icons.add(binding.bookIcon2)
         icons.add(binding.bookIcon3)
@@ -100,7 +100,7 @@ class BookFragment: Fragment() {
     }
 
 
-    fun appendColorIcon(){
+    private fun appendColorIcon(){
         colorIcon.add(R.drawable.ic_book_white1)
         colorIcon.add(R.drawable.ic_book_white2)
         colorIcon.add(R.drawable.ic_book_white3)
