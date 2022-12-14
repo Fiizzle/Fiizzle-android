@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.widget.AppCompatImageView
@@ -72,6 +73,8 @@ class BookFragment: Fragment() {
             }
         }
 
+        initSpinner()
+
         return binding.root
     }
 
@@ -122,6 +125,14 @@ class BookFragment: Fragment() {
         colorIcon.add(R.drawable.ic_book_white19)
         colorIcon.add(R.drawable.ic_book_white20)
         colorIcon.add(R.drawable.ic_book_white21)
+    }
+
+    private fun initSpinner() {  // 스피너 초기화
+        val subject = resources.getStringArray(R.array.spinner)
+
+        val subjectAdapter = ArrayAdapter(requireContext(), R.layout.item_spinner, subject)
+        binding.allSpinner.adapter = subjectAdapter
+        binding.allSpinner.setSelection(0)
     }
 }
 
