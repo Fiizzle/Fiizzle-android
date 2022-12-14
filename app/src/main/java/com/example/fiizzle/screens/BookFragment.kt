@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.Toast
@@ -12,6 +13,8 @@ import androidx.appcompat.widget.AppCompatImageView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.example.fiizzle.MainActivity
 import com.example.fiizzle.R
 import com.example.fiizzle.databinding.FragmentBookBinding
@@ -24,6 +27,10 @@ class BookFragment: Fragment() {
 
     var icons = ArrayList<ImageView>()
     var colorIcon = ArrayList<Int>()
+
+    private val arg : BookFragmentArgs by navArgs()
+
+    var selectedInit = 0
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -61,6 +68,7 @@ class BookFragment: Fragment() {
         }
         appendBookIcon()
         appendColorIcon()
+        clickHandler()
 
         for(i in 0..13){
             icons[i].setImageResource(colorIcon[i])
@@ -73,9 +81,30 @@ class BookFragment: Fragment() {
             }
         }
 
+        selectedInit = arg.selected
         initSpinner()
 
         return binding.root
+    }
+
+
+
+    private fun clickHandler() {
+        binding.allBottomMypage.setOnClickListener{
+            findNavController().navigate(R.id.action_bookFragment_to_mypageFragment)
+        }
+
+        binding.allSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+                if (p2 == 0) {
+                    findNavController().navigate(R.id.action_bookFragment_to_allFragment)
+                }
+            }
+
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+                TODO("Not yet implemented")
+            }
+        }
     }
 
     fun appendBookIcon(){
@@ -132,7 +161,7 @@ class BookFragment: Fragment() {
 
         val subjectAdapter = ArrayAdapter(requireContext(), R.layout.item_spinner, subject)
         binding.allSpinner.adapter = subjectAdapter
-        binding.allSpinner.setSelection(0)
+        binding.allSpinner.setSelection(selectedInit)
     }
 }
 

@@ -4,9 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.fiizzle.R
 import com.example.fiizzle.data.StudyList
@@ -26,11 +28,12 @@ class AllFragment : Fragment() {
     ): View? {
         binding = DataBindingUtil.inflate<FragmentAllBinding>(inflater, R.layout.fragment_all, container, false)
 
-//        binding.button.setOnClickListener {
-//            AddStudyDialog(requireContext()).show()
-//        }
+        binding.allFab.setOnClickListener {
+            AddStudyDialog(requireContext()).show()
+        }
 
         initSpinner()
+        clickHandler()
 
         return binding.root
     }
@@ -38,6 +41,26 @@ class AllFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         setAdapter()
+    }
+
+    private fun clickHandler() {
+        binding.allBottomMypage.setOnClickListener{
+            findNavController().navigate(R.id.action_allFragment_to_mypageFragment)
+        }
+
+        binding.allSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+                if (p2 != 0) {
+                    val action = AllFragmentDirections.actionAllFragmentToBookFragment(p2)
+                    findNavController().navigate(action)
+
+                }
+            }
+
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+                TODO("Not yet implemented")
+            }
+        }
     }
 
     private fun initSpinner() {  // 스피너 초기화
