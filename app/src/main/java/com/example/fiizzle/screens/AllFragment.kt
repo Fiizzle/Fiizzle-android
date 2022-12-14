@@ -30,9 +30,9 @@ class AllFragment : Fragment() {
 //            AddStudyDialog(requireContext()).show()
 //        }
 
-        return binding.root
-
         initSpinner()
+
+        return binding.root
     }
 
     override fun onResume() {
@@ -41,8 +41,7 @@ class AllFragment : Fragment() {
     }
 
     private fun initSpinner() {  // 스피너 초기화
-        // 도시 스피너 어뎁터 연결
-        val subject = resources.getStringArray(R.array.spinner)  // 도시 목록
+        val subject = resources.getStringArray(R.array.spinner)
 
         val subjectAdapter = ArrayAdapter(requireContext(), R.layout.item_spinner, subject)
         binding.allSpinner.adapter = subjectAdapter
