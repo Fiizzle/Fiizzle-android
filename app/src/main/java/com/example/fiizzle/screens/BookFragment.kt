@@ -1,6 +1,7 @@
 package com.example.fiizzle.screens
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -20,10 +21,21 @@ import com.example.fiizzle.R
 import com.example.fiizzle.databinding.FragmentBookBinding
 import com.skydoves.balloon.*
 import com.skydoves.balloon.overlay.BalloonOverlayCircle
+import org.json.JSONArray
+import org.json.JSONException
 
 
 class BookFragment: Fragment() {
     private lateinit var binding : FragmentBookBinding
+
+    private lateinit var mContext : Context
+    private lateinit var mActivity : MainActivity
+    private val SpinnerSPFKey : String = "SPINNER"
+    private val SpinnerArrayKey : String = "SPINNER_PREF"
+    lateinit var pref : SharedPreferences
+    lateinit var edit : SharedPreferences.Editor
+    private var spinnerArray = ArrayList<String>()
+
 
     private var icons = ArrayList<ImageView>()
     private var colorIcon = ArrayList<Int>()
@@ -32,12 +44,24 @@ class BookFragment: Fragment() {
 
     var selectedInit = 0
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is MainActivity) {
+            mContext = context
+            mActivity = activity as MainActivity
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = DataBindingUtil.inflate<FragmentBookBinding>(inflater, R.layout.fragment_book, container, false)
+
+        pref = mContext.getSharedPreferences(SpinnerSPFKey, Context.MODE_PRIVATE)
+        edit = pref.edit()
+
         val balloon = Balloon.Builder(requireContext())
             .setWidth(BalloonSizeSpec.WRAP)
             .setHeight(BalloonSizeSpec.WRAP)
@@ -155,11 +179,32 @@ class BookFragment: Fragment() {
     }
 
     private fun initSpinner() {  // 스피너 초기화
-        val subject = resources.getStringArray(R.array.spinner)
+        getSpinnerArrayPref()
+        val subject = spinnerArray.toArray()
 
         val subjectAdapter = ArrayAdapter(requireContext(), R.layout.item_spinner, subject)
         binding.allSpinner.adapter = subjectAdapter
         binding.allSpinner.setSelection(selectedInit)
+    }
+
+
+
+    private fun getSpinnerArrayPref() {
+        val json = pref.getString(SpinnerArrayKey, null)
+
+        spinnerArray.clear()
+        spinnerArray.add("전체")
+
+        if (json!=null) {
+            try {
+                var spinnerJson : JSONArray = JSONArray(json)
+                for (i in 0 until spinnerJson.length()) {
+                    spinnerArray.add(spinnerJson.optString(i))
+                }
+            } catch (e : JSONException) {
+                e.printStackTrace()
+            }
+        }
     }
 }
 
