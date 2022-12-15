@@ -108,7 +108,7 @@ class AllFragment : Fragment() {
         binding.allSpinner.adapter = subjectAdapter
         binding.allSpinner.setSelection(0)
 
-        if (spinnerArray.size > 0) {
+        if (spinnerArray.size > 1) {
             binding.allNothingTv.visibility = View.GONE
             binding.allStudyListRv.visibility = View.VISIBLE
         } else {
