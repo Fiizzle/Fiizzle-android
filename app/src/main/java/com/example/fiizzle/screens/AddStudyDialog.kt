@@ -13,6 +13,7 @@ import com.example.fiizzle.databinding.DialogAddStudyBinding
 import com.example.fiizzle.utils.dateToString
 import com.example.fiizzle.utils.getSpinnerArrayPref
 import com.example.fiizzle.utils.putSpinnerArrayPref
+import com.example.fiizzle.utils.splitTotalPageWithDay
 import java.util.Date
 
 class AddStudyDialog(
@@ -24,13 +25,14 @@ class AddStudyDialog(
 
     private var spinnerArray = ArrayList<String>()
 
+    private var newSpinnerItem = ""
+
     private var studyTitle : String = ""
     private var endDate : Date = Date()
     private var pageArray : ArrayList<PageArray> = ArrayList(21)
     private val storePage = Array<PageArray?>(21) {null}
     private var totalPageString : String = ""
-
-    private var newSpinnerItem = ""
+    private val splitArray : ArrayList<String> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -157,5 +159,8 @@ class AddStudyDialog(
         }
 
         Log.d("TOTAL_PAGESTRING", totalPageString)
+
+        splitTotalPageWithDay(3, totalPageString)
+        splitTotalPageWithDay(10, totalPageString)
     }
 }
