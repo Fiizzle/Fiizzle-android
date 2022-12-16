@@ -1,6 +1,7 @@
 package com.example.fiizzle.screens
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -18,12 +19,18 @@ import androidx.navigation.fragment.navArgs
 import com.example.fiizzle.MainActivity
 import com.example.fiizzle.R
 import com.example.fiizzle.databinding.FragmentBookBinding
+import com.example.fiizzle.utils.getSpinnerArrayPref
 import com.skydoves.balloon.*
 import com.skydoves.balloon.overlay.BalloonOverlayCircle
 
 
 class BookFragment: Fragment() {
     private lateinit var binding : FragmentBookBinding
+
+    private lateinit var mContext : Context
+    private lateinit var mActivity : MainActivity
+    private var spinnerArray = ArrayList<String>()
+
 
     private var icons = ArrayList<ImageView>()
     private var colorIcon = ArrayList<Int>()
@@ -32,12 +39,21 @@ class BookFragment: Fragment() {
 
     var selectedInit = 0
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is MainActivity) {
+            mContext = context
+            mActivity = activity as MainActivity
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = DataBindingUtil.inflate<FragmentBookBinding>(inflater, R.layout.fragment_book, container, false)
+
         val balloon = Balloon.Builder(requireContext())
             .setWidth(BalloonSizeSpec.WRAP)
             .setHeight(BalloonSizeSpec.WRAP)
@@ -155,7 +171,9 @@ class BookFragment: Fragment() {
     }
 
     private fun initSpinner() {  // 스피너 초기화
-        val subject = resources.getStringArray(R.array.spinner)
+        spinnerArray = getSpinnerArrayPref(mContext)
+        spinnerArray.add(0, "전체")
+        val subject = spinnerArray.toArray()
 
         val subjectAdapter = ArrayAdapter(requireContext(), R.layout.item_spinner, subject)
         binding.allSpinner.adapter = subjectAdapter
