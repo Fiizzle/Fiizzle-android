@@ -19,6 +19,7 @@ import com.example.fiizzle.R
 import com.example.fiizzle.data.StudyList
 import com.example.fiizzle.databinding.FragmentAllBinding
 import com.example.fiizzle.screens.adapter.AllStudyListRVAdapter
+import com.example.fiizzle.utils.getSpinnerArrayPref
 import org.json.JSONArray
 import org.json.JSONException
 
@@ -101,7 +102,8 @@ class AllFragment : Fragment() {
     }
 
     private fun initSpinner() {  // 스피너 초기화
-        getSpinnerArrayPref()
+        spinnerArray = getSpinnerArrayPref(mContext)
+        spinnerArray.add(0, "전체")
         val subject = spinnerArray.toArray()
 
         val subjectAdapter = ArrayAdapter(requireContext(), R.layout.item_spinner, subject)
@@ -159,23 +161,4 @@ class AllFragment : Fragment() {
             )
         )
     }
-
-    private fun getSpinnerArrayPref() {
-        val json = pref.getString(SpinnerArrayKey, null)
-
-        spinnerArray.clear()
-        spinnerArray.add("전체")
-
-        if (json!=null) {
-            try {
-                var spinnerJson : JSONArray = JSONArray(json)
-                for (i in 0 until spinnerJson.length()) {
-                    spinnerArray.add(spinnerJson.optString(i))
-                }
-            } catch (e : JSONException) {
-                e.printStackTrace()
-            }
-        }
-    }
-
 }

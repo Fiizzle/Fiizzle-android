@@ -19,10 +19,9 @@ import androidx.navigation.fragment.navArgs
 import com.example.fiizzle.MainActivity
 import com.example.fiizzle.R
 import com.example.fiizzle.databinding.FragmentBookBinding
+import com.example.fiizzle.utils.getSpinnerArrayPref
 import com.skydoves.balloon.*
 import com.skydoves.balloon.overlay.BalloonOverlayCircle
-import org.json.JSONArray
-import org.json.JSONException
 
 
 class BookFragment: Fragment() {
@@ -30,10 +29,6 @@ class BookFragment: Fragment() {
 
     private lateinit var mContext : Context
     private lateinit var mActivity : MainActivity
-    private val SpinnerSPFKey : String = "SPINNER"
-    private val SpinnerArrayKey : String = "SPINNER_PREF"
-    lateinit var pref : SharedPreferences
-    lateinit var edit : SharedPreferences.Editor
     private var spinnerArray = ArrayList<String>()
 
 
@@ -58,9 +53,6 @@ class BookFragment: Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = DataBindingUtil.inflate<FragmentBookBinding>(inflater, R.layout.fragment_book, container, false)
-
-        pref = mContext.getSharedPreferences(SpinnerSPFKey, Context.MODE_PRIVATE)
-        edit = pref.edit()
 
         val balloon = Balloon.Builder(requireContext())
             .setWidth(BalloonSizeSpec.WRAP)
@@ -179,32 +171,13 @@ class BookFragment: Fragment() {
     }
 
     private fun initSpinner() {  // 스피너 초기화
-        getSpinnerArrayPref()
+        spinnerArray = getSpinnerArrayPref(mContext)
+        spinnerArray.add(0, "전체")
         val subject = spinnerArray.toArray()
 
         val subjectAdapter = ArrayAdapter(requireContext(), R.layout.item_spinner, subject)
         binding.allSpinner.adapter = subjectAdapter
         binding.allSpinner.setSelection(selectedInit)
-    }
-
-
-
-    private fun getSpinnerArrayPref() {
-        val json = pref.getString(SpinnerArrayKey, null)
-
-        spinnerArray.clear()
-        spinnerArray.add("전체")
-
-        if (json!=null) {
-            try {
-                var spinnerJson : JSONArray = JSONArray(json)
-                for (i in 0 until spinnerJson.length()) {
-                    spinnerArray.add(spinnerJson.optString(i))
-                }
-            } catch (e : JSONException) {
-                e.printStackTrace()
-            }
-        }
     }
 }
 
