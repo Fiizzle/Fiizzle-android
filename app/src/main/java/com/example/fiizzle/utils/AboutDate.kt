@@ -29,3 +29,14 @@ fun cal_d_day(date : Long) : Int {
 
     return calDateDays.toInt()
 }
+
+fun sameDays(date: Long) : Boolean {
+    var dateStr = longToString(date)
+    var nowStr = longToString(System.currentTimeMillis())
+    if (dateStr.equals(nowStr)) {
+        Log.d("SAME_DAYS", "true")
+        return true
+    }
+    Log.d("SAME_DAYS", "false")
+    return false
+}
