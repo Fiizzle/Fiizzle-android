@@ -20,4 +20,9 @@ interface UserDao {
 
     @Query("SELECT * FROM user_table WHERE userIdx= :userId")
     fun getUserInfo(userId : Int) : User
+
+
+    @Query("SELECT * FROM user_table WHERE user_email= :userEmail")
+    fun getUserInfoByEmail(userEmail : String) : User
+
 }
