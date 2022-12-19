@@ -48,28 +48,28 @@ class AddStudyDialog(
         initViews()
     }
 
-    fun noteTime(view: TextView, url: Long) {
-        val now = System.currentTimeMillis()
-        val nowDate = Date(now)
-
-        val localDate = Date(url)
-        val dt = SimpleDateFormat("yy-MM-dd")
-        val tz = TimeZone.getTimeZone("Asia/Seoul")
-        dt.timeZone = tz
-
-        val nowTime = dt.format(nowDate)
-        val localTime = dt.format(localDate)
-
-        val nowTimestamp = dt.parse(nowTime).time
-        val localTimestamp = dt.parse(localTime).time
-
-        val check = (nowTimestamp - localTimestamp)
-        val diff = check / (24 * 60 * 60 * 1000)
-
-        when (diff) {
-            /* .. 처리 .. */
-        }
-    }
+//    fun noteTime(view: TextView, url: Long) {
+//        val now = System.currentTimeMillis()
+//        val nowDate = Date(now)
+//
+//        val localDate = Date(url)
+//        val dt = SimpleDateFormat("yy-MM-dd")
+//        val tz = TimeZone.getTimeZone("Asia/Seoul")
+//        dt.timeZone = tz
+//
+//        val nowTime = dt.format(nowDate)
+//        val localTime = dt.format(localDate)
+//
+//        val nowTimestamp = dt.parse(nowTime).time
+//        val localTimestamp = dt.parse(localTime).time
+//
+//        val check = (nowTimestamp - localTimestamp)
+//        val diff = check / (24 * 60 * 60 * 1000)
+//
+//        when (diff) {
+//            /* .. 처리 .. */
+//        }
+//    }
 
     private fun initViews() = with(binding) {
         //뒤로가기 버튼, 빈 화면 터치를 통해 dialog 사라짐
@@ -140,11 +140,18 @@ class AddStudyDialog(
     }
 
     private fun putSubjectToDB() {
-        Thread {
+        var putSubect : Thread = Thread {
             db.subjectDao.insertSubject(subject)
 
             Log.d("CHECK_ALL_SUBJECT", db.subjectDao.getAllSubject(getUserIdxPref(context)).toString())
-        }.start()
+        }
+        putSubect.start()
+
+        try {
+            putSubect.join()
+        }catch (e : InterruptedException) {
+            e.printStackTrace()
+        }
     }
 
     private fun calculateEachPage(start : Int, end : Int) {

@@ -16,15 +16,21 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.fiizzle.MainActivity
 import com.example.fiizzle.R
+import com.example.fiizzle.data.PtoJDatabase
 import com.example.fiizzle.data.dataClass.StudyList
+import com.example.fiizzle.data.entity.Subject
 import com.example.fiizzle.databinding.FragmentAllBinding
 import com.example.fiizzle.screens.adapter.AllStudyListRVAdapter
+import com.example.fiizzle.utils.cal_d_day
 import com.example.fiizzle.utils.getSpinnerArrayPref
 import com.example.fiizzle.utils.getUserIdxPref
+import com.example.fiizzle.utils.longToString
 
 class AllFragment : Fragment() {
 
     private lateinit var binding : FragmentAllBinding
+    lateinit var db : PtoJDatabase
+
     private val studyListRVAdapter = AllStudyListRVAdapter()
     private var studyList : ArrayList<StudyList> = ArrayList()
 
@@ -34,6 +40,8 @@ class AllFragment : Fragment() {
 
     private var isFabClicked : Boolean = false
     private var userIdx : Int = 0
+
+    private lateinit var subjectList : ArrayList<Subject>
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -49,6 +57,7 @@ class AllFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = DataBindingUtil.inflate<FragmentAllBinding>(inflater, R.layout.fragment_all, container, false)
+        db = PtoJDatabase.getInstance(mContext)
 
         clickHandler()
         userIdx = getUserIdxPref(mContext)
@@ -91,6 +100,12 @@ class AllFragment : Fragment() {
             isFabClicked = true
             AddStudyDialog(requireContext()) {
                 isFabClicked = it
+
+                getStudyList()
+                studyListRVAdapter.addList(studyList)
+                studyListRVAdapter.notifyDataSetChanged()
+                Log.d("AFTER_FAB", studyList.toString())
+
                 initSpinner()
             }.show()
         }
@@ -112,53 +127,45 @@ class AllFragment : Fragment() {
             binding.allNothingTv.visibility = View.VISIBLE
             binding.allStudyListRv.visibility = View.GONE
         }
+        Log.d("AFTER_INIT_SPINNER", spinnerArray.toString())
     }
 
     private fun setAdapter() {
         binding.allStudyListRv.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         binding.allStudyListRv.adapter = studyListRVAdapter
 
-        getTestList()
+        getStudyList()
         studyListRVAdapter.addList(studyList)
+
+        Log.d("SET_ADAPTER", studyList.toString())
     }
 
-    private fun getTestList() {
+    private fun getStudyList() {
         studyList.clear()
 
         var getSubjectList : Thread = Thread {
+            subjectList = db.subjectDao.getAllSubject(userIdx) as ArrayList<Subject>
+        }
+        getSubjectList.start()
 
+        try {
+            getSubjectList.join()
+        } catch (e : InterruptedException) {
+            e.printStackTrace()
         }
 
-//        studyList.add(
-//            StudyList(
-//                "list01",
-//                "2022년 12월 15일",
-//                7
-//            )
-//        )
-//
-//        studyList.add(
-//            StudyList(
-//                "list02",
-//                "2022년 12월 16일",
-//                8
-//            )
-//        )
-//
-//        studyList.add(
-//            StudyList(
-//                "list03",
-//                "2022년 12월 19일",
-//                16
-//            )
-//        )
-//
-//        studyList.add(
-//            StudyList(
-//                "list04",
-//                "2022년 12월 21일",
-//                10
-//            )
-//        )
+        for (i in subjectList) {
+            studyList.add(subjectToStudyList(i))
+        }
+        Log.d("GET_STUDYLIST", studyList.toString())
+    }
+
+    private fun subjectToStudyList(subject : Subject) : StudyList {
+        var study : StudyList = StudyList()
+        study.title = subject.name
+        study.endDate = longToString(subject.endDate)
+        study.d_day = cal_d_day(subject.endDate) + 1
+
+        return study
     }
 }

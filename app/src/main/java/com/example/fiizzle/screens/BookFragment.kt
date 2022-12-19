@@ -18,26 +18,40 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.fiizzle.MainActivity
 import com.example.fiizzle.R
+import com.example.fiizzle.data.PtoJDatabase
+import com.example.fiizzle.data.dataClass.PageArray
+import com.example.fiizzle.data.entity.Subject
 import com.example.fiizzle.databinding.FragmentBookBinding
+import com.example.fiizzle.utils.cal_d_day
 import com.example.fiizzle.utils.getSpinnerArrayPref
+import com.example.fiizzle.utils.getUserIdxPref
+import com.example.fiizzle.utils.splitTotalPageWithDay
 import com.skydoves.balloon.*
 import com.skydoves.balloon.overlay.BalloonOverlayCircle
 
 
 class BookFragment: Fragment() {
     private lateinit var binding : FragmentBookBinding
+    lateinit var db : PtoJDatabase
 
     private lateinit var mContext : Context
     private lateinit var mActivity : MainActivity
     private var spinnerArray = ArrayList<String>()
-
+    private var userIdx = 100
 
     private var icons = ArrayList<ImageView>()
     private var colorIcon = ArrayList<Int>()
+    private var blackIcon = ArrayList<Int>()
 
     private val arg : BookFragmentArgs by navArgs()
 
-    var selectedInit = 0
+    private var selectedInit = 0
+    private var dayCnt = 0
+
+    private lateinit var allSubject : ArrayList<Subject>
+    private lateinit var selectedSubject : Subject
+
+
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -53,6 +67,9 @@ class BookFragment: Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = DataBindingUtil.inflate<FragmentBookBinding>(inflater, R.layout.fragment_book, container, false)
+        db = PtoJDatabase.getInstance(mContext)
+
+        userIdx = getUserIdxPref(mContext)
 
         val balloon = Balloon.Builder(requireContext())
             .setWidth(BalloonSizeSpec.WRAP)
@@ -84,23 +101,55 @@ class BookFragment: Fragment() {
         }
         appendBookIcon()
         appendColorIcon()
+        appendBlackIcon()
         clickHandler()
-
-        for(i in 0..13){
-            icons[i].setImageResource(colorIcon[i])
-            icons[i].setOnClickListener {
-                icons[i].showAlignBottom(balloon)
-//                Toast.makeText(this.activity,
-//                    "눌리지롱",
-//                    Toast.LENGTH_SHORT)
-//                    .show()
-            }
-        }
 
         selectedInit = arg.selected
         initSpinner()
+        setSticker()
+
+        if (dayCnt == 0) {
+            showFinalDialog()
+        }
 
         return binding.root
+    }
+
+    private fun setSticker() {
+        for (i in 0 until 21) {
+            icons[i].setImageResource(blackIcon[i])
+            icons[i].setOnClickListener {
+                //nothing
+            }
+        }
+
+        for(i in 0 until dayCnt){
+            icons[i].setImageResource(colorIcon[i])
+            icons[i].setOnClickListener {
+                icons[i].showAlignBottom(makeBalloon(splitTotalPageWithDay(i + 1, selectedSubject.pageList)))
+            }
+        }
+    }
+
+    private fun makeBalloon(pageArray: PageArray): Balloon {
+
+        return Balloon.Builder(requireContext())
+            .setWidth(BalloonSizeSpec.WRAP)
+            .setHeight(BalloonSizeSpec.WRAP)
+            .setText("오늘의 학습\n${pageArray.startPage}쪽 ~ ${pageArray.endPage}쪽")
+            .setTextColorResource(R.color.black)
+            .setTextSize(15f)
+            .setArrowPositionRules(ArrowPositionRules.ALIGN_ANCHOR)
+            .setArrowSize(10)
+            .setArrowPosition(0.5f)
+            .setPadding(10)
+            .setPaddingHorizontal(20)
+            .setCornerRadius(8f)
+            .setBackgroundColorResource(R.color.white)
+            .setBalloonAnimation(BalloonAnimation.ELASTIC)
+            .setLifecycleOwner(viewLifecycleOwner)
+            .setAutoDismissDuration(1800L)
+            .build()
     }
 
     private fun clickHandler() {
@@ -113,12 +162,37 @@ class BookFragment: Fragment() {
                 if (p2 == 0) {
                     findNavController().navigate(R.id.action_bookFragment_to_allFragment)
                 }
+                else {
+                    binding.bookFirstLayout.visibility = View.VISIBLE;
+                    binding.bookSecondLayout.visibility = View.GONE;
+
+                    var getSpinnerData : Thread = Thread {
+                        allSubject = db.subjectDao.getAllSubject(userIdx) as ArrayList<Subject>
+                    }
+                    getSpinnerData.start()
+                    try {
+                        getSpinnerData.join()
+                    } catch (e : InterruptedException) {
+                        e.printStackTrace()
+                    }
+                    selectedSubject = allSubject[p2-1]
+                    dayCnt = 21 - cal_d_day(selectedSubject.endDate)
+                    setSticker()
+
+                    if (dayCnt == 0) {
+                        showFinalDialog()
+                    }
+                }
             }
 
             override fun onNothingSelected(p0: AdapterView<*>?) {
                 TODO("Not yet implemented")
             }
         }
+    }
+
+    private fun showFinalDialog() {
+        FinalDialog(mContext).show()
     }
     
     private fun appendBookIcon(){
@@ -170,6 +244,30 @@ class BookFragment: Fragment() {
         colorIcon.add(R.drawable.ic_book_white21)
     }
 
+    private fun appendBlackIcon(){
+        blackIcon.add(R.drawable.ic_book_black1)
+        blackIcon.add(R.drawable.ic_book_black2)
+        blackIcon.add(R.drawable.ic_book_black3)
+        blackIcon.add(R.drawable.ic_book_black4)
+        blackIcon.add(R.drawable.ic_book_black5)
+        blackIcon.add(R.drawable.ic_book_black6)
+        blackIcon.add(R.drawable.ic_book_black7)
+        blackIcon.add(R.drawable.ic_book_black8)
+        blackIcon.add(R.drawable.ic_book_black9)
+        blackIcon.add(R.drawable.ic_book_black10)
+        blackIcon.add(R.drawable.ic_book_black11)
+        blackIcon.add(R.drawable.ic_book_black12)
+        blackIcon.add(R.drawable.ic_book_black13)
+        blackIcon.add(R.drawable.ic_book_black14)
+        blackIcon.add(R.drawable.ic_book_black15)
+        blackIcon.add(R.drawable.ic_book_black16)
+        blackIcon.add(R.drawable.ic_book_black17)
+        blackIcon.add(R.drawable.ic_book_black18)
+        blackIcon.add(R.drawable.ic_book_black19)
+        blackIcon.add(R.drawable.ic_book_black20)
+        blackIcon.add(R.drawable.ic_book_black21)
+    }
+
     private fun initSpinner() {  // 스피너 초기화
         spinnerArray = getSpinnerArrayPref(mContext)
         spinnerArray.add(0, "전체")
@@ -178,6 +276,22 @@ class BookFragment: Fragment() {
         val subjectAdapter = ArrayAdapter(requireContext(), R.layout.item_spinner, subject)
         binding.allSpinner.adapter = subjectAdapter
         binding.allSpinner.setSelection(selectedInit)
+
+        binding.bookFirstLayout.visibility = View.VISIBLE;
+        binding.bookSecondLayout.visibility = View.GONE;
+
+        var getSpinnerData : Thread = Thread {
+            allSubject = db.subjectDao.getAllSubject(userIdx) as ArrayList<Subject>
+        }
+        getSpinnerData.start()
+        try {
+            getSpinnerData.join()
+        } catch (e : InterruptedException) {
+            e.printStackTrace()
+        }
+
+        selectedSubject = allSubject[selectedInit - 1]
+        dayCnt = 21 - cal_d_day(selectedSubject.endDate)
     }
 }
 
