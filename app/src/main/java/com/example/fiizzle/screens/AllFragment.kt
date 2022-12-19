@@ -21,10 +21,7 @@ import com.example.fiizzle.data.dataClass.StudyList
 import com.example.fiizzle.data.entity.Subject
 import com.example.fiizzle.databinding.FragmentAllBinding
 import com.example.fiizzle.screens.adapter.AllStudyListRVAdapter
-import com.example.fiizzle.utils.cal_d_day
-import com.example.fiizzle.utils.getSpinnerArrayPref
-import com.example.fiizzle.utils.getUserIdxPref
-import com.example.fiizzle.utils.longToString
+import com.example.fiizzle.utils.*
 
 class AllFragment : Fragment() {
 
@@ -165,6 +162,14 @@ class AllFragment : Fragment() {
         study.title = subject.name
         study.endDate = longToString(subject.endDate)
         study.d_day = cal_d_day(subject.endDate) + 1
+        if (study.d_day == 1) {
+            if (sameDays(subject.endDate)) {
+                study.d_day = 0
+            }
+        }
+        else if (study.d_day <= 0) {
+            study.d_day = 0
+        }
 
         return study
     }

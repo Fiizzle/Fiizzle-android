@@ -22,10 +22,7 @@ import com.example.fiizzle.data.PtoJDatabase
 import com.example.fiizzle.data.dataClass.PageArray
 import com.example.fiizzle.data.entity.Subject
 import com.example.fiizzle.databinding.FragmentBookBinding
-import com.example.fiizzle.utils.cal_d_day
-import com.example.fiizzle.utils.getSpinnerArrayPref
-import com.example.fiizzle.utils.getUserIdxPref
-import com.example.fiizzle.utils.splitTotalPageWithDay
+import com.example.fiizzle.utils.*
 import com.skydoves.balloon.*
 import com.skydoves.balloon.overlay.BalloonOverlayCircle
 
@@ -108,10 +105,6 @@ class BookFragment: Fragment() {
         initSpinner()
         setSticker()
 
-        if (dayCnt == 0) {
-            showFinalDialog()
-        }
-
         return binding.root
     }
 
@@ -177,9 +170,12 @@ class BookFragment: Fragment() {
                     }
                     selectedSubject = allSubject[p2-1]
                     dayCnt = 21 - cal_d_day(selectedSubject.endDate)
+                    if (dayCnt >= 21) {
+                        dayCnt = 21
+                    }
                     setSticker()
 
-                    if (dayCnt == 0) {
+                    if (sameDays(selectedSubject.endDate)) {
                         showFinalDialog()
                     }
                 }
@@ -292,6 +288,9 @@ class BookFragment: Fragment() {
 
         selectedSubject = allSubject[selectedInit - 1]
         dayCnt = 21 - cal_d_day(selectedSubject.endDate)
+        if (dayCnt >= 21) {
+            dayCnt = 21
+        }
     }
 }
 
