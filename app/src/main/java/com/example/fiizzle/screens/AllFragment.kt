@@ -16,12 +16,10 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.fiizzle.MainActivity
 import com.example.fiizzle.R
-import com.example.fiizzle.data.StudyList
+import com.example.fiizzle.data.dataClass.StudyList
 import com.example.fiizzle.databinding.FragmentAllBinding
 import com.example.fiizzle.screens.adapter.AllStudyListRVAdapter
 import com.example.fiizzle.utils.getSpinnerArrayPref
-import org.json.JSONArray
-import org.json.JSONException
 
 class AllFragment : Fragment() {
 

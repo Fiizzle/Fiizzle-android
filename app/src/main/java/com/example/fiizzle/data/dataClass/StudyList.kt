@@ -1,4 +1,4 @@
-package com.example.fiizzle.data
+package com.example.fiizzle.data.dataClass
 
 data class StudyList(
     var title : String = "",

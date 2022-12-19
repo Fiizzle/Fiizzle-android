@@ -1,4 +1,4 @@
-package com.example.fiizzle.data
+package com.example.fiizzle.data.dataClass
 
 data class PageArray(
     var startPage : Int = 0,

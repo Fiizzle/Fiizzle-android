@@ -2,10 +2,9 @@ package com.example.fiizzle.screens.adapter
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.fiizzle.data.StudyList
+import com.example.fiizzle.data.dataClass.StudyList
 import com.example.fiizzle.databinding.ItemStudyListBinding
 
 class AllStudyListRVAdapter : RecyclerView.Adapter<AllStudyListRVAdapter.ViewHolder>() {

@@ -1,7 +1,7 @@
 package com.example.fiizzle.utils
 
 import android.util.Log
-import com.example.fiizzle.data.PageArray
+import com.example.fiizzle.data.dataClass.PageArray
 
 fun splitTotalPageWithDay(day : Int, totalPage : String) : PageArray {
     val splitArray = totalPage.split("/")
