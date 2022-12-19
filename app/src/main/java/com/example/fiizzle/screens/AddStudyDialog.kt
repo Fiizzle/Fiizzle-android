@@ -8,12 +8,11 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.TextView
 import android.widget.Toast
+import com.example.fiizzle.data.PtoJDatabase
 import com.example.fiizzle.data.dataClass.PageArray
+import com.example.fiizzle.data.entity.Subject
 import com.example.fiizzle.databinding.DialogAddStudyBinding
-import com.example.fiizzle.utils.dateToString
-import com.example.fiizzle.utils.getSpinnerArrayPref
-import com.example.fiizzle.utils.putSpinnerArrayPref
-import com.example.fiizzle.utils.splitTotalPageWithDay
+import com.example.fiizzle.utils.*
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -24,13 +23,16 @@ class AddStudyDialog(
 ) : Dialog(context) {
 
     private lateinit var binding : DialogAddStudyBinding
+    lateinit var db : PtoJDatabase
 
     private var spinnerArray = ArrayList<String>()
 
     private var newSpinnerItem = ""
 
+    private var subject : Subject = Subject()
+
     private var studyTitle : String = ""
-    private var endDate : Date = Date()
+    private var endDate : Long = System.currentTimeMillis()
     private var pageArray : ArrayList<PageArray> = ArrayList(21)
     private val storePage = Array<PageArray?>(21) {null}
     private var totalPageString : String = ""
@@ -40,6 +42,8 @@ class AddStudyDialog(
         super.onCreate(savedInstanceState)
 
         binding = DialogAddStudyBinding.inflate(layoutInflater)
+        db = PtoJDatabase.getInstance(context)
+
         setContentView(binding.root)
         initViews()
     }
@@ -99,25 +103,20 @@ class AddStudyDialog(
                 Toast.makeText(context, "시작과 종료페이지를 정확히 입력해주세요.", Toast.LENGTH_SHORT).show()
             }
             else {
+                storeSubject(
+                    dialogAddStudyContentTitleEt.text.toString(),
+                    dialogAddStudyContentEndYearEt.text.toString(),
+                    dialogAddStudyContentEndMonthEt.text.toString(),
+                    dialogAddStudyContentEndDateEt.text.toString(),
+                    dialogAddStudyContentPageStartEt.text.toString().toInt(),
+                    dialogAddStudyContentPageEndEt.text.toString().toInt()
+                )
+                putSubjectToDB()
 
                 spinnerArray = getSpinnerArrayPref(context)
                 newSpinnerItem = dialogAddStudyContentTitleEt.text.toString()
                 putSpinnerArrayPref(context, spinnerArray, newSpinnerItem)
 
-                Log.d("ENDDATE_ORIGIN", endDate.toString())
-                studyTitle = newSpinnerItem
-                endDate = Date(
-                    dialogAddStudyContentEndYearEt.text.toString().toInt() - 1900,
-                    dialogAddStudyContentEndMonthEt.text.toString().toInt() - 1,
-                    dialogAddStudyContentEndDateEt.text.toString().toInt()
-                )
-                Log.d("STUDYTITLE", studyTitle)
-                Log.d("ENDDATE", endDate.toString())
-                Log.d("ENDDATE_DateToString", dateToString(endDate))
-                calculateEachPage(
-                    dialogAddStudyContentPageStartEt.text.toString().toInt(),
-                    dialogAddStudyContentPageEndEt.text.toString().toInt()
-                )
                 okCallback(false)
                 dismiss()
             }
@@ -127,6 +126,25 @@ class AddStudyDialog(
             okCallback(false)
             dismiss()
         }
+    }
+
+    private fun storeSubject(title : String, year : String, month : String, date : String, start : Int, end : Int) {
+        subject.name = title
+        subject.userId = getUserIdxPref(context)
+        subject.endDate = stringToMillis(year + "년 " + month + "월 " + date + "일")
+
+        calculateEachPage(start, end)
+        subject.pageList = totalPageString
+
+        Log.d("STORE_SUBJECT", "과목명 : " + subject.name + "/유저아이디 : " + subject.userId + "/종료일 : " + longToString(subject.endDate) + "/페이지리스트 : " + subject.pageList)
+    }
+
+    private fun putSubjectToDB() {
+        Thread {
+            db.subjectDao.insertSubject(subject)
+
+            Log.d("CHECK_ALL_SUBJECT", db.subjectDao.getAllSubject(getUserIdxPref(context)).toString())
+        }.start()
     }
 
     private fun calculateEachPage(start : Int, end : Int) {
@@ -166,15 +184,7 @@ class AddStudyDialog(
                 }
             }
         }
-
-//        var idx = 0
-//        for (j in storePage) {
-//            Log.d("STOREPAGE", "index : " + idx.toString() + ", startPage : " + j!!.startPage.toString() + ", endPage : " + j!!.endPage.toString())
-//            idx++
-//        }
-
         setTotalPageString()
-
     }
 
     private fun setTotalPageString() {

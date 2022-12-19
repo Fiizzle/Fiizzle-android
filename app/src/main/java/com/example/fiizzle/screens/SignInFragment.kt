@@ -8,12 +8,19 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.fiizzle.R
+import com.example.fiizzle.data.PtoJDatabase
+import com.example.fiizzle.data.entity.User
 import com.example.fiizzle.databinding.FragmentSignInBinding
 
 class SignInFragment : Fragment() {
 
+    private var user = User()
+    private val nickname = "지니"
+    private val email = "kaj1226@naver.com"
+    private val pw = "abc123"
 
     private lateinit var binding : FragmentSignInBinding
+    lateinit var db : PtoJDatabase
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -21,6 +28,7 @@ class SignInFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = DataBindingUtil.inflate<FragmentSignInBinding>(inflater, R.layout.fragment_sign_in, container, false)
+        db = PtoJDatabase.getInstance(requireContext())
 
         clickHandler()
 
@@ -28,6 +36,14 @@ class SignInFragment : Fragment() {
     }
 
     private fun clickHandler() {
+        user.nickname = nickname
+        user.email = email
+        user.password = pw
+
+        Thread{
+            db.userDao.insertUser(user)
+        }.start()
+
         binding.signInCompleteBtn.setOnClickListener {
             findNavController().navigate(R.id.action_signInFragment_to_allFragment)
         }
