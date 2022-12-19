@@ -1,11 +1,9 @@
 package com.example.fiizzle.screens
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -18,7 +16,7 @@ class SignInFragment : Fragment() {
 
 
     private lateinit var binding : FragmentSignInBinding
-    private lateinit var db : PtoJDatabase
+    lateinit var db : PtoJDatabase
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -27,12 +25,21 @@ class SignInFragment : Fragment() {
     ): View? {
         binding = DataBindingUtil.inflate<FragmentSignInBinding>(inflater, R.layout.fragment_sign_in, container, false)
         db = PtoJDatabase.getInstance(requireContext())
+
         clickHandler()
 
         return binding.root
     }
 
     private fun clickHandler() {
+        user.nickname = nickname
+        user.email = email
+        user.password = pw
+
+        Thread{
+            db.userDao.insertUser(user)
+        }.start()
+
         binding.signInCompleteBtn.setOnClickListener {
             if(binding.signInEdtPw1.text.toString() != binding.signInEdtPw2.text.toString()){
                 Toast.makeText(this.activity,
@@ -46,23 +53,5 @@ class SignInFragment : Fragment() {
                 findNavController().navigate(R.id.action_signInFragment_to_loginFragment)
             }
         }
-    }
-
-    private fun insertUserDataInDB(){
-        val user = User(
-            binding.signInEdtName.text.toString(),
-            binding.signInEdtEmail.text.toString(),
-            binding.signInEdtPw1.text.toString()
-        )
-        Thread {
-            db.userDao.insertUser(user)
-        }.start()
-    }
-
-    private fun testUserDataInDB(){
-        Thread {
-            val user = db.userDao.getUserInfoByEmail(binding.signInEdtEmail.text.toString())
-            Log.d("test_db", "user[0] : $user");
-        }.start()
     }
 }

@@ -17,5 +17,8 @@ data class Subject(
     var name : String = "",
 
     @ColumnInfo(name = "subject_endDate")
-    var endDate : Long = 0
+    var endDate : Long = 0,
+
+    @ColumnInfo(name = "subject_page")
+    var pageList : String = ""
 )

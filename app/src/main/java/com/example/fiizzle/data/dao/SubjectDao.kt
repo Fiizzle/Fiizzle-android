@@ -18,6 +18,6 @@ interface SubjectDao {
     @Update
     fun updateSubject(subject: Subject)
 
-    @Query("SELECT * FROM subject_table WHERE subject_userId= :userId")
-    fun getAllSubject(userId : Int) : Subject
+    @Query("SELECT * FROM subject_table WHERE subject_userId=:userId")
+    fun getAllSubject(userId : Int) : List<Subject>
 }

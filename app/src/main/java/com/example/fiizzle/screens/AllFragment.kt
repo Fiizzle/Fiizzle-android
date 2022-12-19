@@ -20,6 +20,7 @@ import com.example.fiizzle.data.dataClass.StudyList
 import com.example.fiizzle.databinding.FragmentAllBinding
 import com.example.fiizzle.screens.adapter.AllStudyListRVAdapter
 import com.example.fiizzle.utils.getSpinnerArrayPref
+import com.example.fiizzle.utils.getUserIdxPref
 
 class AllFragment : Fragment() {
 
@@ -29,13 +30,10 @@ class AllFragment : Fragment() {
 
     private lateinit var mContext : Context
     private lateinit var mActivity : MainActivity
-    private val SpinnerSPFKey : String = "SPINNER"
-    private val SpinnerArrayKey : String = "SPINNER_PREF"
-    lateinit var pref : SharedPreferences
-    lateinit var edit : SharedPreferences.Editor
     private var spinnerArray = ArrayList<String>()
 
     private var isFabClicked : Boolean = false
+    private var userIdx : Int = 0
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -52,10 +50,9 @@ class AllFragment : Fragment() {
     ): View? {
         binding = DataBindingUtil.inflate<FragmentAllBinding>(inflater, R.layout.fragment_all, container, false)
 
-        pref = mContext.getSharedPreferences(SpinnerSPFKey, MODE_PRIVATE)
-        edit = pref.edit()
-
         clickHandler()
+        userIdx = getUserIdxPref(mContext)
+        Log.d("USER_IDX_ALL", userIdx.toString())
 
         return binding.root
     }
@@ -127,36 +124,41 @@ class AllFragment : Fragment() {
 
     private fun getTestList() {
         studyList.clear()
-        studyList.add(
-            StudyList(
-                "list01",
-                "2022년 12월 15일",
-                7
-            )
-        )
 
-        studyList.add(
-            StudyList(
-                "list02",
-                "2022년 12월 16일",
-                8
-            )
-        )
+        var getSubjectList : Thread = Thread {
 
-        studyList.add(
-            StudyList(
-                "list03",
-                "2022년 12월 19일",
-                16
-            )
-        )
+        }
 
-        studyList.add(
-            StudyList(
-                "list04",
-                "2022년 12월 21일",
-                10
-            )
-        )
+//        studyList.add(
+//            StudyList(
+//                "list01",
+//                "2022년 12월 15일",
+//                7
+//            )
+//        )
+//
+//        studyList.add(
+//            StudyList(
+//                "list02",
+//                "2022년 12월 16일",
+//                8
+//            )
+//        )
+//
+//        studyList.add(
+//            StudyList(
+//                "list03",
+//                "2022년 12월 19일",
+//                16
+//            )
+//        )
+//
+//        studyList.add(
+//            StudyList(
+//                "list04",
+//                "2022년 12월 21일",
+//                10
+//            )
+//        )
     }
 }
