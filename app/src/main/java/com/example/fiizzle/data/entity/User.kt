@@ -6,7 +6,6 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "user_table")
 data class User(
-
     @ColumnInfo(name = "user_nickname")
     var nickname: String = "",
 

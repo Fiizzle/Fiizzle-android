@@ -1,7 +1,6 @@
 package com.example.fiizzle.screens
 
 import android.content.Context
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -18,8 +17,10 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.fiizzle.MainActivity
 import com.example.fiizzle.R
+import com.example.fiizzle.data.dataClass.PageArray
 import com.example.fiizzle.databinding.FragmentBookBinding
 import com.example.fiizzle.utils.getSpinnerArrayPref
+import com.example.fiizzle.utils.splitTotalPageWithDay
 import com.skydoves.balloon.*
 import com.skydoves.balloon.overlay.BalloonOverlayCircle
 
@@ -38,6 +39,7 @@ class BookFragment: Fragment() {
     private val arg : BookFragmentArgs by navArgs()
 
     var selectedInit = 0
+    val testStr = "1,2/2,4/3,6/4,8/5,10/6,12/7,14/8,16/9,18/10,20/11,22/12,24/13,26/14,28/15,30/16,32/17,34/18,36/19,38/20,40/21,42"
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -54,24 +56,6 @@ class BookFragment: Fragment() {
     ): View? {
         binding = DataBindingUtil.inflate<FragmentBookBinding>(inflater, R.layout.fragment_book, container, false)
 
-        val balloon = Balloon.Builder(requireContext())
-            .setWidth(BalloonSizeSpec.WRAP)
-            .setHeight(BalloonSizeSpec.WRAP)
-            .setText("오늘의 학습\n161쪽 ~ 170쪽")
-            .setTextColorResource(R.color.black)
-            .setTextSize(15f)
-            .setArrowPositionRules(ArrowPositionRules.ALIGN_ANCHOR)
-            .setArrowSize(10)
-            .setArrowPosition(0.5f)
-            .setPadding(10)
-            .setPaddingHorizontal(20)
-            .setCornerRadius(8f)
-            .setBackgroundColorResource(R.color.white)
-            .setBalloonAnimation(BalloonAnimation.ELASTIC)
-            .setLifecycleOwner(viewLifecycleOwner)
-            .setAutoDismissDuration(1800L)
-            .build()
-
         binding.bookButton.setOnClickListener {
             if(binding.bookFirstLayout.visibility == View.GONE){
                 binding.bookFirstLayout.visibility = View.VISIBLE;
@@ -86,14 +70,10 @@ class BookFragment: Fragment() {
         appendColorIcon()
         clickHandler()
 
-        for(i in 0..13){
+        for(i in 1..13){
             icons[i].setImageResource(colorIcon[i])
             icons[i].setOnClickListener {
-                icons[i].showAlignBottom(balloon)
-//                Toast.makeText(this.activity,
-//                    "눌리지롱",
-//                    Toast.LENGTH_SHORT)
-//                    .show()
+                icons[i].showAlignBottom(makeBalloon(splitTotalPageWithDay(i,testStr)))
             }
         }
 
@@ -123,6 +103,7 @@ class BookFragment: Fragment() {
     
     private fun appendBookIcon(){
         icons.add(binding.bookIcon1)
+        icons.add(binding.bookIcon1)
         icons.add(binding.bookIcon2)
         icons.add(binding.bookIcon3)
         icons.add(binding.bookIcon4)
@@ -148,6 +129,7 @@ class BookFragment: Fragment() {
 
     private fun appendColorIcon(){
         colorIcon.add(R.drawable.ic_book_white1)
+        colorIcon.add(R.drawable.ic_book_white1)
         colorIcon.add(R.drawable.ic_book_white2)
         colorIcon.add(R.drawable.ic_book_white3)
         colorIcon.add(R.drawable.ic_book_white4)
@@ -168,6 +150,27 @@ class BookFragment: Fragment() {
         colorIcon.add(R.drawable.ic_book_white19)
         colorIcon.add(R.drawable.ic_book_white20)
         colorIcon.add(R.drawable.ic_book_white21)
+    }
+
+    private fun makeBalloon(pageArray: PageArray): Balloon {
+
+        return Balloon.Builder(requireContext())
+            .setWidth(BalloonSizeSpec.WRAP)
+            .setHeight(BalloonSizeSpec.WRAP)
+            .setText("오늘의 학습\n${pageArray.startPage}쪽 ~ ${pageArray.endPage}쪽")
+            .setTextColorResource(R.color.black)
+            .setTextSize(15f)
+            .setArrowPositionRules(ArrowPositionRules.ALIGN_ANCHOR)
+            .setArrowSize(10)
+            .setArrowPosition(0.5f)
+            .setPadding(10)
+            .setPaddingHorizontal(20)
+            .setCornerRadius(8f)
+            .setBackgroundColorResource(R.color.white)
+            .setBalloonAnimation(BalloonAnimation.ELASTIC)
+            .setLifecycleOwner(viewLifecycleOwner)
+            .setAutoDismissDuration(1800L)
+            .build()
     }
 
     private fun initSpinner() {  // 스피너 초기화

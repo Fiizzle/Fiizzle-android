@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -32,26 +33,28 @@ class SignInFragment : Fragment() {
     }
 
     private fun clickHandler() {
-        user.nickname = nickname
-        user.email = email
-        user.password = pw
-
-        Thread{
-            db.userDao.insertUser(user)
-        }.start()
-
         binding.signInCompleteBtn.setOnClickListener {
             if(binding.signInEdtPw1.text.toString() != binding.signInEdtPw2.text.toString()){
                 Toast.makeText(this.activity,
-                    "비밀번호 똑바로 치셈;;",
+                    "동일한 비밀번호를 입력해주세요.",
                     Toast.LENGTH_SHORT)
                     .show()
-                testUserDataInDB()
             }
             else {
                 insertUserDataInDB()
                 findNavController().navigate(R.id.action_signInFragment_to_loginFragment)
             }
         }
+    }
+
+    private fun insertUserDataInDB(){
+        val user = User(
+            binding.signInEdtName.text.toString(),
+            binding.signInEdtEmail.text.toString(),
+            binding.signInEdtPw1.text.toString()
+        )
+        Thread {
+            db.userDao.insertUser(user)
+        }.start()
     }
 }
