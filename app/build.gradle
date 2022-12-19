@@ -65,4 +65,8 @@ dependencies {
     //cardview
     implementation "androidx.cardview:cardview:1.0.0"
 
+    //roomDB
+    implementation "androidx.room:room-runtime:$roomVersion"
+    kapt "androidx.room:room-compiler:$roomVersion"
+
 }

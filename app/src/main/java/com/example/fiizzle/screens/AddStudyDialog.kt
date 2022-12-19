@@ -2,19 +2,21 @@ package com.example.fiizzle.screens
 
 import android.app.Dialog
 import android.content.Context
-import android.content.SharedPreferences
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
+import android.widget.TextView
 import android.widget.Toast
-import com.example.fiizzle.data.PageArray
+import com.example.fiizzle.data.dataClass.PageArray
 import com.example.fiizzle.databinding.DialogAddStudyBinding
 import com.example.fiizzle.utils.dateToString
 import com.example.fiizzle.utils.getSpinnerArrayPref
 import com.example.fiizzle.utils.putSpinnerArrayPref
 import com.example.fiizzle.utils.splitTotalPageWithDay
-import java.util.Date
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 class AddStudyDialog(
     context : Context,
@@ -40,6 +42,29 @@ class AddStudyDialog(
         binding = DialogAddStudyBinding.inflate(layoutInflater)
         setContentView(binding.root)
         initViews()
+    }
+
+    fun noteTime(view: TextView, url: Long) {
+        val now = System.currentTimeMillis()
+        val nowDate = Date(now)
+
+        val localDate = Date(url)
+        val dt = SimpleDateFormat("yy-MM-dd")
+        val tz = TimeZone.getTimeZone("Asia/Seoul")
+        dt.timeZone = tz
+
+        val nowTime = dt.format(nowDate)
+        val localTime = dt.format(localDate)
+
+        val nowTimestamp = dt.parse(nowTime).time
+        val localTimestamp = dt.parse(localTime).time
+
+        val check = (nowTimestamp - localTimestamp)
+        val diff = check / (24 * 60 * 60 * 1000)
+
+        when (diff) {
+            /* .. 처리 .. */
+        }
     }
 
     private fun initViews() = with(binding) {
