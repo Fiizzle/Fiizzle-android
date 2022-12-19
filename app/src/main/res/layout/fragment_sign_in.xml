@@ -74,11 +74,10 @@
             android:layout_marginHorizontal="40dp"
             android:layout_marginTop="45dp"
             android:paddingStart="20dp"
-            android:inputType="textPassword"
             android:background="@drawable/item_background"
             android:paddingTop="17dp"
             android:paddingBottom="17dp"
-            android:hint="********"
+            android:hint="지리산반달곰의기백"
 
             android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"

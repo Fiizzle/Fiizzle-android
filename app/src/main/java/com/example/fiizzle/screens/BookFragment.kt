@@ -38,23 +38,6 @@ class BookFragment: Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = DataBindingUtil.inflate<FragmentBookBinding>(inflater, R.layout.fragment_book, container, false)
-        val balloon = Balloon.Builder(requireContext())
-            .setWidth(BalloonSizeSpec.WRAP)
-            .setHeight(BalloonSizeSpec.WRAP)
-            .setText("오늘의 학습\n161쪽 ~ 170쪽")
-            .setTextColorResource(R.color.black)
-            .setTextSize(15f)
-            .setArrowPositionRules(ArrowPositionRules.ALIGN_ANCHOR)
-            .setArrowSize(10)
-            .setArrowPosition(0.5f)
-            .setPadding(10)
-            .setPaddingHorizontal(20)
-            .setCornerRadius(8f)
-            .setBackgroundColorResource(R.color.white)
-            .setBalloonAnimation(BalloonAnimation.ELASTIC)
-            .setLifecycleOwner(viewLifecycleOwner)
-            .setAutoDismissDuration(1800L)
-            .build()
 
         binding.bookButton.setOnClickListener {
             if(binding.bookFirstLayout.visibility == View.GONE){
@@ -69,17 +52,7 @@ class BookFragment: Fragment() {
         appendBookIcon()
         appendColorIcon()
         clickHandler()
-
-        for(i in 0..13){
-            icons[i].setImageResource(colorIcon[i])
-            icons[i].setOnClickListener {
-                icons[i].showAlignBottom(balloon)
-//                Toast.makeText(this.activity,
-//                    "눌리지롱",
-//                    Toast.LENGTH_SHORT)
-//                    .show()
-            }
-        }
+        makeBookItem()
 
         selectedInit = arg.selected
         initSpinner()
@@ -160,6 +133,37 @@ class BookFragment: Fragment() {
         val subjectAdapter = ArrayAdapter(requireContext(), R.layout.item_spinner, subject)
         binding.allSpinner.adapter = subjectAdapter
         binding.allSpinner.setSelection(selectedInit)
+    }
+
+    fun makeBalloon(text : String): Balloon {
+        val balloon = Balloon.Builder(requireContext())
+            .setWidth(BalloonSizeSpec.WRAP)
+            .setHeight(BalloonSizeSpec.WRAP)
+            .setText("오늘의 학습\n" + text)
+            .setTextColorResource(R.color.black)
+            .setTextSize(15f)
+            .setArrowPositionRules(ArrowPositionRules.ALIGN_ANCHOR)
+            .setArrowSize(10)
+            .setArrowPosition(0.5f)
+            .setPadding(10)
+            .setPaddingHorizontal(20)
+            .setCornerRadius(8f)
+            .setBackgroundColorResource(R.color.white)
+            .setBalloonAnimation(BalloonAnimation.ELASTIC)
+            .setLifecycleOwner(viewLifecycleOwner)
+            .setAutoDismissDuration(1800L)
+            .build()
+
+        return balloon
+    }
+
+    private fun makeBookItem(){
+        for(i in 0..13){
+            icons[i].setImageResource(colorIcon[i])
+            icons[i].setOnClickListener {
+                icons[i].showAlignBottom(makeBalloon(i.toString() + "~" + (2*i).toString()))
+            }
+        }
     }
 }
 

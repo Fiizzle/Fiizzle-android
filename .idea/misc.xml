@@ -6,6 +6,7 @@
         <entry key="..\:/Users/ojy10/StudioProjects/Fiizzle-android/app/src/main/res/drawable/item_background.xml" value="0.193" />
         <entry key="..\:/Users/ojy10/StudioProjects/Fiizzle-android/app/src/main/res/drawable/item_background2.xml" value="0.193" />
         <entry key="..\:/Users/ojy10/StudioProjects/Fiizzle-android/app/src/main/res/layout/activity_main.xml" value="0.1" />
+        <entry key="..\:/Users/ojy10/StudioProjects/Fiizzle-android/app/src/main/res/layout/dialog_add_study.xml" value="0.25" />
         <entry key="..\:/Users/ojy10/StudioProjects/Fiizzle-android/app/src/main/res/layout/fragment_all.xml" value="0.18489583333333334" />
         <entry key="..\:/Users/ojy10/StudioProjects/Fiizzle-android/app/src/main/res/layout/fragment_book.xml" value="0.14" />
         <entry key="..\:/Users/ojy10/StudioProjects/Fiizzle-android/app/src/main/res/layout/fragment_book2.xml" value="0.3619791666666667" />
@@ -14,23 +15,6 @@
         <entry key="..\:/Users/ojy10/StudioProjects/Fiizzle-android/app/src/main/res/layout/fragment_sign_in.xml" value="0.16" />
         <entry key="..\:/Users/ojy10/StudioProjects/Fiizzle-android/app/src/main/res/layout/fragment_splash.xml" value="0.18489583333333334" />
         <entry key="..\:/Users/ojy10/StudioProjects/Fiizzle-android/app/src/main/res/layout/item_study_list.xml" value="0.18489583333333334" />
-      </map>
-    </option>
-  </component>
-  <component name="DesignSurface">
-    <option name="filePathToZoomLevelMap">
-      <map>
-        <entry key="..\:/Users/lsh92/AndroidStudioProjects/Fiizzle/app/src/main/res/drawable/menu_mypage_selector.xml" value="0.1495" />
-        <entry key="..\:/Users/lsh92/AndroidStudioProjects/Fiizzle/app/src/main/res/drawable/menu_study_selector.xml" value="0.1495" />
-        <entry key="..\:/Users/lsh92/AndroidStudioProjects/Fiizzle/app/src/main/res/drawable/spinner_background.xml" value="0.1495" />
-        <entry key="..\:/Users/lsh92/AndroidStudioProjects/Fiizzle/app/src/main/res/drawable/spinner_popup.xml" value="0.1195" />
-        <entry key="..\:/Users/lsh92/AndroidStudioProjects/Fiizzle/app/src/main/res/drawable/spinner_popup_background.xml" value="0.14" />
-        <entry key="..\:/Users/lsh92/AndroidStudioProjects/Fiizzle/app/src/main/res/layout/activity_main.xml" value="0.1" />
-        <entry key="..\:/Users/lsh92/AndroidStudioProjects/Fiizzle/app/src/main/res/layout/fragment_all.xml" value="0.152" />
-        <entry key="..\:/Users/lsh92/AndroidStudioProjects/Fiizzle/app/src/main/res/layout/fragment_splash.xml" value="0.24947916666666667" />
-        <entry key="..\:/Users/lsh92/AndroidStudioProjects/Fiizzle/app/src/main/res/layout/item_spinner.xml" value="0.2484375" />
-        <entry key="..\:/Users/lsh92/AndroidStudioProjects/Fiizzle/app/src/main/res/layout/item_spinner_popup.xml" value="0.24947916666666667" />
-        <entry key="..\:/Users/lsh92/AndroidStudioProjects/Fiizzle/app/src/main/res/layout/spinner_dropdown_item.xml" value="0.24791666666666667" />
       </map>
     </option>
   </component>
