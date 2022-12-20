@@ -36,6 +36,7 @@ class MypageFragment : Fragment() {
         userIdx = getUserIdxPref(requireContext())
         db = PtoJDatabase.getInstance(requireContext())
 
+        getUserMypageInfo()
         clickHandler()
 
         return binding.root
@@ -52,9 +53,6 @@ class MypageFragment : Fragment() {
             binding.mypageCurrentCntTv.text = status.current.toString()
             binding.mypageFinishCntTv.text = status.finish.toString()
         }.start()
-
-
-
 
     }
 
