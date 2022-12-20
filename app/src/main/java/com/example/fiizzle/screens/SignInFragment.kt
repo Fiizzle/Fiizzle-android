@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -14,10 +15,6 @@ import com.example.fiizzle.databinding.FragmentSignInBinding
 
 class SignInFragment : Fragment() {
 
-    private var user = User()
-    private val nickname = "지니"
-    private val email = "kaj1226@naver.com"
-    private val pw = "abc123"
 
     private lateinit var binding : FragmentSignInBinding
     lateinit var db : PtoJDatabase
@@ -36,16 +33,28 @@ class SignInFragment : Fragment() {
     }
 
     private fun clickHandler() {
-        user.nickname = nickname
-        user.email = email
-        user.password = pw
+        binding.signInCompleteBtn.setOnClickListener {
+            if(binding.signInEdtPw1.text.toString() != binding.signInEdtPw2.text.toString()){
+                Toast.makeText(this.activity,
+                    "동일한 비밀번호를 입력해주세요.",
+                    Toast.LENGTH_SHORT)
+                    .show()
+            }
+            else {
+                insertUserDataInDB()
+                findNavController().navigate(R.id.action_signInFragment_to_loginFragment)
+            }
+        }
+    }
 
-        Thread{
+    private fun insertUserDataInDB(){
+        val user = User(
+            binding.signInEdtName.text.toString(),
+            binding.signInEdtEmail.text.toString(),
+            binding.signInEdtPw1.text.toString()
+        )
+        Thread {
             db.userDao.insertUser(user)
         }.start()
-
-        binding.signInCompleteBtn.setOnClickListener {
-            findNavController().navigate(R.id.action_signInFragment_to_allFragment)
-        }
     }
 }

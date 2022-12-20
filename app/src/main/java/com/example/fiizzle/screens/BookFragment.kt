@@ -1,5 +1,6 @@
 package com.example.fiizzle.screens
 
+import OnSwipeTouchListener
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
@@ -68,38 +69,11 @@ class BookFragment: Fragment() {
 
         userIdx = getUserIdxPref(mContext)
 
-        val balloon = Balloon.Builder(requireContext())
-            .setWidth(BalloonSizeSpec.WRAP)
-            .setHeight(BalloonSizeSpec.WRAP)
-            .setText("오늘의 학습\n161쪽 ~ 170쪽")
-            .setTextColorResource(R.color.black)
-            .setTextSize(15f)
-            .setArrowPositionRules(ArrowPositionRules.ALIGN_ANCHOR)
-            .setArrowSize(10)
-            .setArrowPosition(0.5f)
-            .setPadding(10)
-            .setPaddingHorizontal(20)
-            .setCornerRadius(8f)
-            .setBackgroundColorResource(R.color.white)
-            .setBalloonAnimation(BalloonAnimation.ELASTIC)
-            .setLifecycleOwner(viewLifecycleOwner)
-            .setAutoDismissDuration(1800L)
-            .build()
-
-        binding.bookButton.setOnClickListener {
-            if(binding.bookFirstLayout.visibility == View.GONE){
-                binding.bookFirstLayout.visibility = View.VISIBLE;
-                binding.bookSecondLayout.visibility = View.GONE;
-            }
-            else {
-                binding.bookSecondLayout.visibility = View.VISIBLE;
-                binding.bookFirstLayout.visibility = View.GONE;
-            }
-        }
         appendBookIcon()
         appendColorIcon()
         appendBlackIcon()
         clickHandler()
+        addSlideListener()
 
         selectedInit = arg.selected
         initSpinner()
@@ -122,6 +96,29 @@ class BookFragment: Fragment() {
                 icons[i].showAlignBottom(makeBalloon(splitTotalPageWithDay(i + 1, selectedSubject.pageList)))
             }
         }
+        if(dayCnt<11){
+            binding.bookFirstLayout.visibility = View.VISIBLE;
+            binding.bookSecondLayout.visibility = View.GONE;
+        }
+        else{
+            binding.bookFirstLayout.visibility = View.GONE;
+            binding.bookSecondLayout.visibility = View.VISIBLE;
+        }
+    }
+    private fun addSlideListener(){
+        binding.bookFirstLayout.setOnTouchListener(object: OnSwipeTouchListener(requireContext()) {
+            override fun onSwipeLeft() {
+                binding.bookFirstLayout.visibility = View.GONE;
+                binding.bookSecondLayout.visibility = View.VISIBLE;
+            }
+        })
+
+        binding.bookSecondLayout.setOnTouchListener(object: OnSwipeTouchListener(requireContext()) {
+            override fun onSwipeRight() {
+                binding.bookFirstLayout.visibility = View.VISIBLE;
+                binding.bookSecondLayout.visibility = View.GONE;
+            }
+        })
     }
 
     private fun makeBalloon(pageArray: PageArray): Balloon {

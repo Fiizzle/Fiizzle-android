@@ -26,7 +26,7 @@
             android:text="회원가입"
             android:textColor="#000000"
             android:textSize="24sp"
-            app:layout_constraintStart_toStartOf="@+id/sign_in_edt_id"
+            app:layout_constraintStart_toStartOf="@+id/sign_in_edt_email"
             app:layout_constraintTop_toBottomOf="@+id/sign_in_logo" />
 
         <TextView
@@ -40,7 +40,7 @@
             app:layout_constraintTop_toBottomOf="@+id/sign_in_tv1" />
 
         <EditText
-            android:id="@+id/sign_in_edt_id"
+            android:id="@+id/sign_in_edt_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="40dp"
@@ -64,8 +64,8 @@
             android:textSize="18sp"
             android:layout_marginStart="15dp"
             android:textColor="#000000"
-            app:layout_constraintBottom_toTopOf="@+id/sign_in_edt_id"
-            app:layout_constraintStart_toStartOf="@+id/sign_in_edt_id" />
+            app:layout_constraintBottom_toTopOf="@+id/sign_in_edt_email"
+            app:layout_constraintStart_toStartOf="@+id/sign_in_edt_email" />
 
         <EditText
             android:id="@+id/sign_in_edt_name"
@@ -74,16 +74,15 @@
             android:layout_marginHorizontal="40dp"
             android:layout_marginTop="45dp"
             android:paddingStart="20dp"
-            android:inputType="textPassword"
             android:background="@drawable/item_background"
             android:paddingTop="17dp"
             android:paddingBottom="17dp"
-            android:hint="********"
+            android:hint="지리산반달곰의기백"
 
             android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/sign_in_edt_id" />
+            app:layout_constraintTop_toBottomOf="@+id/sign_in_edt_email" />
 
         <TextView
             android:id="@+id/login_tv_name"
